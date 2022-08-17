@@ -8,8 +8,28 @@ app.use(express.json());
 
 const port = process.env.PORT || 3010;
 
+app.get("/getqtcode", () => {
+  res.send("please use post method");
+});
+
 app.post("/getqrcode", (req, res) => {
   const val = req.body;
+  const {
+    sellerName,
+    vatRegistrationNumber,
+    invoiceTimestamp,
+    invoiceTotal,
+    invoiceVatTotal,
+  } = val;
+  if (
+    sellerName === "" ||
+    vatRegistrationNumber === "" ||
+    invoiceTimestamp === "" ||
+    invoiceTotal === "" ||
+    invoiceVatTotal === ""
+  ) {
+    return res.send("please provide all fields");
+  }
   async function ss() {
     const invoice = new Invoice({
       sellerName: val.sellerName,
