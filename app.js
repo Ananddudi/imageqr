@@ -6,7 +6,7 @@ require("dotenv").config();
 // Make a request for a user with a given ID
 app.use(express.json());
 
-const port = process.env.PORT || 3010;
+const port = process.env.PORT || 3007;
 
 app.get("/getqtcode", () => {
   res.send("please use post method");
@@ -29,6 +29,16 @@ app.post("/getqrcode", (req, res) => {
     invoiceVatTotal === ""
   ) {
     return res.send("please provide all fields");
+  }
+
+  if (
+    !sellerName ||
+    !vatRegistrationNumber ||
+    !invoiceTimestamp ||
+    !invoiceTotal ||
+    !invoiceVatTotal
+  ) {
+    return res.send("Must have all field");
   }
   async function ss() {
     const invoice = new Invoice({
