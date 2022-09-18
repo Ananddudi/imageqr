@@ -8,10 +8,6 @@ app.use(express.json());
 
 const port = process.env.PORT || 3007;
 
-app.get("/getqtcode", () => {
-  res.send("please use post method");
-});
-
 app.post("/getqrcode", (req, res) => {
   const val = req.body;
   const {
@@ -53,6 +49,10 @@ app.post("/getqrcode", (req, res) => {
     return res.status(200).json({ QRCODE: imageData });
   }
   ss();
+});
+
+app.all("*", (req, res) => {
+  res.send("you better to use post method instead!");
 });
 
 app.listen(port, () => {
