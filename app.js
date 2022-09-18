@@ -2,11 +2,17 @@ const { Invoice } = require("@axenda/zatca");
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const cors = require("cors");
 
+app.use(cors());
 // Make a request for a user with a given ID
 app.use(express.json());
 
 const port = process.env.PORT || 3007;
+
+app.get("/helloword", (req, res) => {
+  res.send("Hello Worlds");
+});
 
 app.post("/getqrcode", (req, res) => {
   const val = req.body;
