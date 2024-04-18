@@ -5,60 +5,39 @@ require("dotenv").config();
 const cors = require("cors");
 
 app.use(cors());
-// Make a request for a user with a given ID
 app.use(express.json());
 
 const port = process.env.PORT || 3007;
 
-app.get("/helloword", (req, res) => {
+app.get("/test", (req, res) => {
   res.send("Hello Worlds");
 });
 
-app.post("/getqrcode", (req, res) => {
-  const val = req.body;
-  const {
-    sellerName,
-    vatRegistrationNumber,
-    invoiceTimestamp,
-    invoiceTotal,
-    invoiceVatTotal,
-  } = val;
-  if (
-    sellerName === "" ||
-    vatRegistrationNumber === "" ||
-    invoiceTimestamp === "" ||
-    invoiceTotal === "" ||
-    invoiceVatTotal === ""
-  ) {
-    return res.send("please provide all fields");
-  }
-
-  if (
-    !sellerName ||
-    !vatRegistrationNumber ||
-    !invoiceTimestamp ||
-    !invoiceTotal ||
-    !invoiceVatTotal
-  ) {
-    return res.send("Must have all field");
-  }
-  async function ss() {
+app.post("/getqrcode", async(req, res) => {
+  try{
+  const forms = req.body;
+    for(let item in forms){
+      if(!item){
+        return res.send("please provide all fields");
+      }
+    }
     const invoice = new Invoice({
-      sellerName: val.sellerName,
-      vatRegistrationNumber: val.vatRegistrationNumber,
-      invoiceTimestamp: val.invoiceTimestamp,
-      invoiceTotal: val.invoiceTotal,
-      invoiceVatTotal: val.invoiceVatTotal,
+      sellerName: forms.sellerName,
+      vatRegistrationNumber: forms.vatRegistrationNumber,
+      invoiceTimestamp: forms.invoiceTimestamp,
+      invoiceTotal: forms.invoiceTotal,
+      invoiceVatTotal: forms.invoiceVatTotal,
     });
 
     const imageData = await invoice.render();
     return res.status(200).json({ QRCODE: imageData });
+  }catch(err){
+   res.send(err.message) 
   }
-  ss();
 });
 
 app.all("*", (req, res) => {
-  res.send("you better to use post method instead!");
+  res.send("This route does not exist");
 });
 
 app.listen(port, () => {
